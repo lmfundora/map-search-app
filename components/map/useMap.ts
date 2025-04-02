@@ -1,0 +1,27 @@
+import { View } from "ol";
+import TileLayer from "ol/layer/Tile";
+import { OSM } from "ol/source";
+import Zoom from "ol/control/Zoom.js";
+import { defaults as defaultControls } from "ol/control/defaults.js";
+import ScaleLine from "ol/control/ScaleLine.js";
+import Map from "ol/Map.js";
+
+export function useMap(mapDiv: HTMLDivElement | null) {
+  const zoom = new Zoom();
+  const control = new ScaleLine({});
+  const initialMap = new Map({
+    layers: [
+      new TileLayer({
+        source: new OSM(),
+      }),
+    ],
+    view: new View({
+      center: [0, 0],
+      zoom: 2,
+    }),
+    controls: defaultControls().extend([zoom, control]),
+  });
+  if (mapDiv) initialMap.setTarget(mapDiv);
+
+  return initialMap;
+}
