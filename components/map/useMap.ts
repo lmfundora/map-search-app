@@ -4,12 +4,12 @@ import { OSM } from "ol/source";
 import Zoom from "ol/control/Zoom.js";
 import { defaults as defaultControls } from "ol/control/defaults.js";
 import ScaleLine from "ol/control/ScaleLine.js";
-import Map from "ol/Map.js";
+import CustomMap from "./customMap";
 
 export function useMap(mapDiv: HTMLDivElement | null) {
   const zoom = new Zoom();
   const control = new ScaleLine({});
-  const initialMap = new Map({
+  const initialMap = new CustomMap({
     layers: [
       new TileLayer({
         source: new OSM(),
@@ -18,6 +18,7 @@ export function useMap(mapDiv: HTMLDivElement | null) {
     view: new View({
       center: [-9165803, 2644595],
       zoom: 13,
+      projection: "EPSG:4326",
     }),
     controls: defaultControls().extend([zoom, control]),
   });

@@ -1,3 +1,4 @@
+"use client";
 import Map from "@/components/map/Map";
 import { Button } from "@/components/ui/button";
 
@@ -11,12 +12,15 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { Suspense, useEffect } from "react";
 
 export default function Home() {
   return (
     <>
       <div className="w-screen h-screen flex">
-        <Map />
+        <Suspense>
+          <Map />
+        </Suspense>
         <div className="w-1/2 h-screen">
           <Drawer direction="right">
             <DrawerTrigger>Open</DrawerTrigger>
