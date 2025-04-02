@@ -16,8 +16,8 @@ export function useMap(mapDiv: HTMLDivElement | null) {
       }),
     ],
     view: new View({
-      center: [0, 0],
-      zoom: 2,
+      center: [-9165803, 2644595],
+      zoom: 13,
     }),
     controls: defaultControls().extend([zoom, control]),
   });
