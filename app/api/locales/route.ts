@@ -1,17 +1,10 @@
 import { prisma } from "@/lib/prisma_client";
+import { formatResponse } from "../formatResponse";
 
 export async function GET(request: Request) {
   const locales = await prisma.locales.findMany();
 
-  return new Response(
-    JSON.stringify({
-      status: 200,
-      data: locales,
-    }),
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    },
-  );
+  const { data, headers } = formatResponse(locales);
+
+  return new Response(data, headers);
 }

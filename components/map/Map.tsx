@@ -1,27 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useMap } from "./useMap";
-import CustomMap from "./customMap";
 import { getLocales } from "@/lib/client/getLocales";
-import type { layerData } from "./customMap";
 import { selectStyle } from "@/lib/layerStyles/points";
+import type { local } from "@/lib/types";
+import { useEffect, useState } from "react";
+import type { layerData } from "./customMap";
+import CustomMap from "./customMap";
+import { useMap } from "./useMap";
 
-type local = {
-  id: number;
-  name: string;
-  image: string;
-  slogan: string;
-  created_at: string;
-  x: number;
-  y: number;
-};
-
-const api = async () => {
-  await getLocales();
-};
-
-function extrctData<layerData>(data: local[]) {
+function extrctData(data: local[]): layerData[] {
   return data.map((item) => ({
     props: {
       id: item.id,
@@ -53,7 +40,6 @@ const Map = () => {
   }, [mapDiv]);
 
   useEffect(() => {
-    console.log(response);
     if (response) {
       map?.drawPoints({
         data: extrctData(response),
