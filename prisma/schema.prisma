@@ -9,7 +9,7 @@ datasource db {
 }
 
 model Locales {
-  id              Int               @id @default(autoincrement())
+  id              BigInt            @id @default(autoincrement())
   name            String            @unique
   image           String
   slogan          String
@@ -30,6 +30,8 @@ model Productos {
   brand           String?
   products_locals Products_locals[]
   image           String            @default("")
+
+  @@index([name]) // Define un índice en la columna 'name'
 }
 
 model Products_locals {
@@ -39,7 +41,9 @@ model Products_locals {
   stock         BigInt
   disponibility Boolean   @default(false)
   product_id    BigInt
-  local_id      Int
+  local_id      BigInt
   Locales       Locales   @relation(fields: [local_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   productos     Productos @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([product_id, disponibility]) // Define un índice compuesto en 'product_id' y 'disponibility'
 }

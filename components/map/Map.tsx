@@ -3,7 +3,7 @@
 import { getLocales } from "@/lib/client/getLocales";
 import { selectStyle } from "@/lib/layerStyles/points";
 import type { local } from "@/lib/types";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import type { layerData } from "./customMap";
 import CustomMap from "./customMap";
 import { useMap } from "./useMap";
@@ -21,18 +21,15 @@ function extrctData(data: local[]): layerData[] {
   }));
 }
 
+const localesPromise = getLocales();
+
 const Map = () => {
   const [mapDiv, setMapState] = useState<HTMLDivElement | null>();
   const [map, setMap] = useState<CustomMap | null>(null);
-  const [response, setResponse] = useState<local[] | null>(null);
+
+  const response = use(localesPromise) ?? { data: [] };
 
   useEffect(() => {
-    const api = async () => {
-      const r = await getLocales();
-      setResponse(r.data);
-    };
-    api();
-
     if (mapDiv) {
       const map = useMap(mapDiv);
       setMap(map);
@@ -42,12 +39,12 @@ const Map = () => {
   useEffect(() => {
     if (response) {
       map?.drawPoints({
-        data: extrctData(response),
+        data: extrctData(response.data),
         layerId: "points",
         setStyle: selectStyle,
       });
     }
-  }, [response]);
+  }, [map]);
 
   return (
     <>

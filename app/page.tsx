@@ -13,12 +13,27 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { getLocalsAndProductsByProductName } from "@/lib/client/getLocalsAndProductsByProductName";
+import { handleErrors } from "@/lib/hooks/handleErrors";
 import { usePlaceholderAnimation } from "@/lib/hooks/usePlaceholderAnimation";
+import { AxiosError } from "axios";
 
 export default function Home() {
-  const placeholders = ["Refresco de cola", "Cream de piel"];
+  const placeholders = ["Refresco de cola", "Cerma de piel", "Jamón cerrano"];
 
   const placeholder = usePlaceholderAnimation(placeholders);
+
+  async function handleSearch(name: string) {
+    let response;
+    try {
+      response = await getLocalsAndProductsByProductName(name);
+      console.log(response);
+    } catch (error) {
+      handleErrors(error as AxiosError);
+    }
+    
+    
+  }
 
   return (
     <>
@@ -26,8 +41,11 @@ export default function Home() {
         <div className="w-full h-full relative">
           <Map />
           <SearchBar
-            className="absolute top-2 right-2 bg-white w-[90%]"
+            className="absolute top-2 bg-white mx-[2.5%] w-[95%]"
             placeholder={placeholder}
+            action={(q) => {
+              handleSearch(q);
+            }}
           />
         </div>
         <div className="w-1/2 h-screen">

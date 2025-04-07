@@ -1,5 +1,5 @@
 export type local = {
-  id: number;
+  id: string;
   name: string;
   image: string;
   slogan: string;

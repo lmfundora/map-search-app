@@ -10,8 +10,7 @@ type customResponse = {
 export function formatResponse(data: any): customResponse {
   return {
     data: JSON.stringify({
-      status: 200,
-      data: data,
+      data,
     }),
     headers: {
       headers: {
