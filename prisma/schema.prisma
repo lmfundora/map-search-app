@@ -29,6 +29,7 @@ model Productos {
   description     String?
   brand           String?
   products_locals Products_locals[]
+  image           String            @default("")
 }
 
 model Products_locals {
