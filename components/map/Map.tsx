@@ -7,6 +7,7 @@ import { use, useEffect, useState } from "react";
 import type { layerData } from "./customMap";
 import CustomMap from "./customMap";
 import { useMap } from "./useMap";
+import { useMapContext } from "../providers/contexts/MapContext";
 
 function extrctData(data: local[]): layerData[] {
   return data.map((item) => ({
@@ -25,7 +26,7 @@ const localesPromise = getLocales();
 
 const Map = () => {
   const [mapDiv, setMapState] = useState<HTMLDivElement | null>();
-  const [map, setMap] = useState<CustomMap | null>(null);
+  const { map, setMap } = useMapContext();
 
   const response = use(localesPromise) ?? { data: [] };
 

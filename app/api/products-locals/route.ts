@@ -34,8 +34,6 @@ export async function GET(request: Request) {
       },
     });
 
-    console.log(localesConProducto, productosEncontrados);
-
     const d = {
       localesDisponibles: idToString(localesConProducto),
       productosEncontrados: idToString(productosEncontrados),

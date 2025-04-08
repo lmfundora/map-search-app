@@ -1,5 +1,6 @@
 "use client";
 import Map from "@/components/map/Map";
+import { useMapContext } from "@/components/providers/contexts/MapContext";
 import SearchBar from "@/components/searchBar/SearchBar";
 import { Button } from "@/components/ui/button";
 
@@ -16,23 +17,35 @@ import {
 import { getLocalsAndProductsByProductName } from "@/lib/client/getLocalsAndProductsByProductName";
 import { handleErrors } from "@/lib/hooks/handleErrors";
 import { usePlaceholderAnimation } from "@/lib/hooks/usePlaceholderAnimation";
+import { selectStyle } from "@/lib/layerStyles/points";
 import { AxiosError } from "axios";
 
 export default function Home() {
   const placeholders = ["Refresco de cola", "Cerma de piel", "Jamón cerrano"];
 
+  const { map } = useMapContext();
   const placeholder = usePlaceholderAnimation(placeholders);
 
   async function handleSearch(name: string) {
     let response;
     try {
       response = await getLocalsAndProductsByProductName(name);
-      console.log(response);
+
+      // Nedd to improve this part
+      const data = response.data.localesDisponibles.map((item: any) => ({
+        props: {
+          id: item.id,
+        },
+        coords: [item.x, item.y],
+      }));
+      map?.drawPoints({
+        data: data,
+        layerId: "points",
+        setStyle: selectStyle,
+      });
     } catch (error) {
       handleErrors(error as AxiosError);
     }
-    
-    
   }
 
   return (

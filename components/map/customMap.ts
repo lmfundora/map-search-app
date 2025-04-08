@@ -26,7 +26,7 @@ class CustomMap extends Map {
   public drawPoints({ data, layerId, setStyle }: drawPointsProps) {
     const map = this;
 
-    // this.removeAllLayers();
+    this.removeAllLayers();
 
     // this.hideOverlays();
     let gjson = {
@@ -68,8 +68,16 @@ class CustomMap extends Map {
     });
     map.addLayer(puntos);
   }
-  public addCustomLayer(layerName: string): void {
-    // Add custom layer functionality
+
+  public removeAllLayers() {
+    let l = this.getLayers().getArray();
+
+    l.forEach((layer, index) => {
+      if (index !== 0) {
+        // Asumiendo que el mapa base es la primera capa
+        this.removeLayer(layer);
+      }
+    });
   }
 
   public removeCustomMarker(markerId: string): void {
