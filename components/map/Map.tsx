@@ -2,10 +2,7 @@
 
 import { getLocales } from "@/lib/client/getLocales";
 import { selectStyle } from "@/lib/layerStyles/points";
-import type { local } from "@/lib/types";
 import { use, useEffect, useState } from "react";
-import type { layerData } from "./customMap";
-import CustomMap from "./customMap";
 import { useMap } from "./useMap";
 import { useMapContext } from "../providers/contexts/MapContext";
 import { extractLocalesData } from "@/lib/utils";

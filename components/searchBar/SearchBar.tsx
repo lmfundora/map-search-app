@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 type Props = {
   className?: string;
   action: (query: string) => void;
+  onClose?: () => void;
   placeholder?: string;
   loading?: boolean;
 };
@@ -14,6 +15,7 @@ type Props = {
 const SearchBar = ({
   className,
   action,
+  onClose,
   placeholder,
   loading = false,
 }: Props) => {
@@ -29,6 +31,11 @@ const SearchBar = ({
         q !== "" && action(q);
       }, 700),
     );
+  };
+
+  const close = () => {
+    setQuery("");
+    onClose && onClose();
   };
 
   return (
@@ -55,7 +62,7 @@ const SearchBar = ({
                 variant="ghost"
                 size="icon"
                 className="absolute right-0 cursor-pointer"
-                onClick={() => setQuery("")}
+                onClick={close}
               >
                 <X color="red" />
               </Button>
