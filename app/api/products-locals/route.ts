@@ -19,11 +19,6 @@ export async function GET(request: Request) {
           },
         },
       },
-      select: {
-        id: true,
-        x: true,
-        y: true,
-      },
     });
 
     const productosEncontrados = await prisma.productos.findMany({

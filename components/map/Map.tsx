@@ -8,19 +8,7 @@ import type { layerData } from "./customMap";
 import CustomMap from "./customMap";
 import { useMap } from "./useMap";
 import { useMapContext } from "../providers/contexts/MapContext";
-
-function extrctData(data: local[]): layerData[] {
-  return data.map((item) => ({
-    props: {
-      id: item.id,
-      name: item.name,
-      image: item.image,
-      slogan: item.slogan,
-      created_at: item.created_at,
-    },
-    coords: [item.x, item.y],
-  }));
-}
+import { extractLocalesData } from "@/lib/utils";
 
 const localesPromise = getLocales();
 
@@ -40,7 +28,7 @@ const Map = () => {
   useEffect(() => {
     if (response) {
       map?.drawPoints({
-        data: extrctData(response.data),
+        data: extractLocalesData(response.data),
         layerId: "points",
         setStyle: selectStyle,
       });

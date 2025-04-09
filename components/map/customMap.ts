@@ -27,6 +27,7 @@ class CustomMap extends Map {
     const map = this;
 
     this.removeAllLayers();
+    if (data.length === 0) return;
 
     // this.hideOverlays();
     let gjson = {
@@ -62,7 +63,7 @@ class CustomMap extends Map {
     });
 
     map.getView().fit(vectorSource.getExtent(), {
-      padding: [170, 100, 290, 100],
+      padding: [100, 50, 50, 50],
       duration: 1000,
       easing: linear,
     });

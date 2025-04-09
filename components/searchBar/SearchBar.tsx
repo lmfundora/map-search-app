@@ -1,15 +1,22 @@
 "use client";
-import React, { useState } from "react";
-import { Search, X } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { LoaderCircle, Search, X } from "lucide-react";
 import { Button } from "../ui/button";
+import { Progress } from "@/components/ui/progress";
 
 type Props = {
   className?: string;
   action: (query: string) => void;
   placeholder?: string;
+  loading?: boolean;
 };
 
-const SearchBar = ({ className, action, placeholder }: Props) => {
+const SearchBar = ({
+  className,
+  action,
+  placeholder,
+  loading = false,
+}: Props) => {
   const [query, setQuery] = useState("");
   const [timer, setTimer] = useState<NodeJS.Timeout>();
 
@@ -20,35 +27,43 @@ const SearchBar = ({ className, action, placeholder }: Props) => {
     setTimer(
       setTimeout(() => {
         q !== "" && action(q);
-      }, 500),
+      }, 700),
     );
   };
 
   return (
-    <div
-      className={`flex align-middle gap-1 justify-center items-center rounded-lg ps-2 focus-within:ring-2 ring-primary/30 ring-offset-2 ${className}`}
-    >
-      <Search color="gray" />
-      <div className="w-full relative">
-        <input
-          type="text"
-          value={query}
-          onChange={handleInputChange}
-          placeholder={placeholder}
-          className="border-0 outline-none focus:outline-none ring-0 focus:ring-0 w-full h-9"
-        />
-        {query && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute right-0 cursor-pointer"
-            onClick={() => setQuery("")}
-          >
-            <X color="red" />
-          </Button>
-        )}
+    <>
+      <div className={` ${className} rounded-lg`}>
+        <div
+          className={`flex align-middle gap-1 justify-center items-center rounded-lg ps-2 focus-within:ring-2 ring-primary/30 ring-offset-2`}
+        >
+          {loading ? (
+            <LoaderCircle color="gray" className="animate-spin" />
+          ) : (
+            <Search color="gray" />
+          )}
+          <div className="w-full relative">
+            <input
+              type="text"
+              value={query}
+              onChange={handleInputChange}
+              placeholder={placeholder}
+              className="border-0 outline-none focus:outline-none ring-0 focus:ring-0 w-full h-9"
+            />
+            {query && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute right-0 cursor-pointer"
+                onClick={() => setQuery("")}
+              >
+                <X color="red" />
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
