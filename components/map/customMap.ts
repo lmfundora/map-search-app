@@ -37,6 +37,7 @@ class CustomMap extends Map {
       crs: { type: "name", properties: { name: "urn:ogc:def:crs:EPSG::3857" } },
       features: data.map((d) => ({
         type: "Feature",
+        id: d.props?.id,
         properties: d.props,
 
         geometry: {
