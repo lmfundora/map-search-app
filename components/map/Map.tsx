@@ -6,6 +6,7 @@ import { use, useEffect, useState } from "react";
 import { useMap } from "./useMap";
 import { useMapContext } from "../providers/contexts/MapContext";
 import { extractLocalesData } from "@/lib/utils";
+import PointOverlay from "./overlays/PointOverlay";
 
 const localesPromise = getLocales();
 
@@ -35,6 +36,7 @@ const Map = () => {
   return (
     <>
       <div className="w-full h-full" ref={(map) => setMapState(map)}></div>
+      <PointOverlay />
     </>
   );
 };
