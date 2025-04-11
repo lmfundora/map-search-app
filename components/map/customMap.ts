@@ -7,6 +7,12 @@ import { Cluster } from "ol/source";
 import VectorLayer from "ol/layer/Vector";
 import { linear } from "ol/easing";
 import { MapBrowserEvent, Overlay } from "ol";
+import { FeatureLike } from "ol/Feature";
+
+export type overlayData = {
+  value: any | null;
+  features: FeatureLike[] | null;
+};
 
 export type layerData = {
   props: any;
@@ -86,10 +92,12 @@ class CustomMap extends Map {
   public setOverlay({
     id,
     htmlElement,
+    setData,
   }: {
     id: string;
     htmlElement: HTMLElement;
-  }): void {
+    setData: (d: overlayData) => void;
+  }) {
     // Remove specific marker
     const over = new Overlay({
       id: id,
@@ -103,30 +111,27 @@ class CustomMap extends Map {
 
     over.setElement(htmlElement);
     this.addOverlay(over);
-    let pdata;
 
     this.on("click", (event) => {
-      // const { data, coords, features } =
-      this.getLayerData({
+      const { data, coords, features } = this.getLayerData({
         event: event,
         layerName: id,
       });
 
-      // if (data != null && data.length == 1) {
-      //   // hideOverlays(map, id);
+      if (data != null) {
+        // hideOverlays(map, id);
 
-      //   over.setPosition(coords);
+        over.setPosition(coords);
 
-      //   pdata = { data, features };
-      // }
+        setData({ value: data, features });
+      }
     });
 
-    // return {
-    //   value: pdata,
-    //   close: () => {
-    //     over.setPosition(undefined);
-    //   },
-    // };
+    return {
+      close: () => {
+        over.setPosition(undefined);
+      },
+    };
   }
 
   public getLayerData({
@@ -147,17 +152,15 @@ class CustomMap extends Map {
       },
     });
 
-    console.log(features);
     if (features.length === 0)
-      return { data: null, layerName: null, coords: null };
+      return { data: null, layerName: null, coords: null, features: null };
 
     const data = features[0].getProperties();
-    console.log("data", data);
 
     return {
-      data,
+      data: data.features?.[0].values_,
       layerName: ln,
-      // coords: features[0].values_.features[0].values_.geometry.flatCoordinates,
+      coords: data.geometry.flatCoordinates,
       features,
     };
   }
