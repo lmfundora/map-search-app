@@ -20,7 +20,10 @@ const PointOverlay = () => {
   }, [map]);
 
   return (
-    <div ref={(div) => setOverlayDiv(div)} className="h-20 w-40 bg-white">
+    <div
+      ref={(div) => setOverlayDiv(div)}
+      className="h-20 w-40 bg-white ol-popup"
+    >
       <p className="text-black">{data?.value.id}</p>
     </div>
   );
