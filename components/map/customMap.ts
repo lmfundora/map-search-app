@@ -28,6 +28,42 @@ export type drawPointsProps = {
 class CustomMap extends Map {
   constructor(options: MapOptions) {
     super(options);
+    this.clickHanlder();
+  }
+
+  clickHanlder() {
+    this.on("click", (event) => {
+      const f = this.getFeaturesAtPixel(event.pixel);
+      // Cuando no hay datos donde se hizo click
+      if (f.length === 0) {
+        this.hideOverlays();
+        return;
+      }
+
+      const { features } = f[0].getProperties();
+      const featureData = features[0].values_;
+      const coords = featureData.geometry.flatCoordinates;
+      console.log(featureData);
+
+      // Cando sean vairos puntos
+      if (features.length > 1) {
+        const overlay = this.getOverlayById("multiple");
+        if (overlay) {
+          this.hideOverlays("multiple");
+          overlay.setPosition(coords);
+        }
+        return;
+      }
+
+      // Cuando solo hay un punto
+      const overlay = this.getOverlayById(featureData.layerId);
+      if (overlay) {
+        this.hideOverlays(featureData.layerId);
+        const setData = overlay?.get("action");
+        setData(featureData);
+        overlay.setPosition(coords);
+      }
+    });
   }
 
   public drawPoints({ data, layerId, setStyle }: drawPointsProps) {
@@ -96,7 +132,7 @@ class CustomMap extends Map {
   }: {
     id: string;
     htmlElement: HTMLElement;
-    setData: (d: overlayData) => void;
+    setData?: (d: overlayData) => void;
   }) {
     // Remove specific marker
     const over = new Overlay({
@@ -109,23 +145,11 @@ class CustomMap extends Map {
       },
     });
 
+    if (setData) {
+      over.set("action", setData, true);
+    }
     over.setElement(htmlElement);
     this.addOverlay(over);
-
-    this.on("click", (event) => {
-      const { data, coords, features } = this.getLayerData({
-        event: event,
-        layerName: id,
-      });
-
-      if (data != null) {
-        // hideOverlays(map, id);
-
-        over.setPosition(coords);
-
-        setData({ value: data, features });
-      }
-    });
 
     return {
       close: () => {
@@ -165,8 +189,17 @@ class CustomMap extends Map {
     };
   }
 
-  public getCustomLayerByName(name: string): any {
-    // Get layer by custom name
+  public hideOverlays(id?: string) {
+    const overlays = this.getOverlays();
+    if (id) {
+      overlays.forEach((overlay) => {
+        if (overlay.getId() !== id) overlay.setPosition(undefined);
+      });
+    } else {
+      overlays.forEach((overlay) => {
+        overlay.setPosition(undefined);
+      });
+    }
   }
 
   public toggleCustomLayer(layerId: string, visible: boolean): void {
