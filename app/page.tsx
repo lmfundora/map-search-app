@@ -1,4 +1,6 @@
 "use client";
+import CustomList from "@/components/customList/CustomList";
+import LocalesCard from "@/components/localesCard/LocalesCard";
 import Map from "@/components/map/Map";
 import { useMapContext } from "@/components/providers/contexts/MapContext";
 import SearchBar from "@/components/searchBar/SearchBar";
@@ -10,11 +12,14 @@ import { usePlaceholderAnimation } from "@/lib/hooks/usePlaceholderAnimation";
 import { selectStyle } from "@/lib/layerStyles/points";
 import { extractLocalesData } from "@/lib/utils";
 import { AxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const layerId = "points";
 
 export default function Home() {
   const placeholders = ["Refresco de cola", "Cerma de piel", "Jamón cerrano"];
   const [loading, setLoading] = useState(false);
+  const [locales, setLocales] = useState([]);
 
   const { map } = useMapContext();
   const placeholder = usePlaceholderAnimation(placeholders);
@@ -28,11 +33,14 @@ export default function Home() {
       handleErrors(error as AxiosError);
     }
 
-    const data = extractLocalesData(response.data.localesDisponibles);
+    const data = extractLocalesData({
+      data: response.data.localesDisponibles,
+      layerId: layerId,
+    });
 
     map?.drawPoints({
       data: data,
-      layerId: "points",
+      layerId: layerId,
       setStyle: selectStyle,
     });
     setLoading(false);
@@ -42,15 +50,20 @@ export default function Home() {
     let response;
     try {
       response = await getLocales();
+      setLocales(response.data);
     } catch (error) {
       handleErrors(error as AxiosError);
     }
     map?.drawPoints({
-      data: extractLocalesData(response.data),
-      layerId: "points",
+      data: extractLocalesData({ data: response.data, layerId }),
+      layerId: layerId,
       setStyle: selectStyle,
     });
   }
+
+  useEffect(() => {
+    drawLocales();
+  }, [map]);
 
   return (
     <>
@@ -66,7 +79,11 @@ export default function Home() {
           />
         </div>
         <div className="w-1/2 h-screen">
-          <p>Workin on it</p>
+          <CustomList
+            items={locales}
+            className="w-full h-full text-black flex flex-wrap gap-4 justify-around"
+            renderItem={(item) => <LocalesCard local={item} />}
+          />
         </div>
       </div>
     </>
