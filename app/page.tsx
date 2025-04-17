@@ -78,10 +78,10 @@ export default function Home() {
             onClose={() => drawLocales()}
           />
         </div>
-        <div className="w-1/2 h-screen">
+        <div className="w-1/2 h-screen bg-gray-100">
           <CustomList
             items={locales}
-            className="w-full h-full text-black flex flex-wrap gap-4 justify-around"
+            className="w-full h-full text-black flex flex-wrap justify-around px-3"
             renderItem={(item) => <LocalesCard local={item} />}
           />
         </div>
