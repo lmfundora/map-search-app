@@ -30,6 +30,7 @@ export default function Home() {
     try {
       response = await getLocalsAndProductsByProductName(name);
     } catch (error) {
+      setLoading(false);
       handleErrors(error as AxiosError);
     }
 
@@ -78,10 +79,13 @@ export default function Home() {
             onClose={() => drawLocales()}
           />
         </div>
-        <div className="w-1/2 h-screen bg-gray-100">
+        <div className="w-1/2 h-screen bg-muted flex flex-col">
+          <h3 className="text-tprimary text-2xl font-bold mx-4 mt-2">
+            Locales
+          </h3>
           <CustomList
             items={locales}
-            className="w-full h-full text-black flex flex-wrap justify-around px-3"
+            className="w-full grow px-4"
             renderItem={(item) => <LocalesCard local={item} />}
           />
         </div>

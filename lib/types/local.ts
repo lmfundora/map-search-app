@@ -4,6 +4,9 @@ export type local = {
   image: string;
   slogan: string;
   created_at: string;
+  horario?: string;
+  direccion?: string;
+  contacto?: string;
   x: number;
   y: number;
 };
