@@ -16,8 +16,8 @@ export function useMap(mapDiv: HTMLDivElement | null) {
       }),
     ],
     view: new View({
-      center: [-9165803, 2644595],
-      zoom: 13,
+      center: [-82.36506230011582, 23.113845366344023],
+      zoom: 12.500317339709877,
       projection: "EPSG:4326",
     }),
     controls: defaultControls().extend([zoom, control]),

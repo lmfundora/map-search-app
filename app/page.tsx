@@ -14,12 +14,31 @@ import { extractLocalesData } from "@/lib/utils";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerPortal,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
+import { Flag } from "lucide-react";
+import MyDialog from "@/components/customDialog/MyDialog";
+
 const layerId = "points";
 
 export default function Home() {
   const placeholders = ["Refresco de cola", "Cerma de piel", "Jamón cerrano"];
   const [loading, setLoading] = useState(false);
   const [locales, setLocales] = useState([]);
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [dialogContainer, setDialogContainer] = useState<HTMLDivElement | null>(
+    null,
+  );
 
   const { map } = useMapContext();
   const placeholder = usePlaceholderAnimation(placeholders);
@@ -44,6 +63,7 @@ export default function Home() {
       layerId: layerId,
       setStyle: selectStyle,
     });
+    setDialogOpen(true);
     setLoading(false);
   }
 
@@ -79,16 +99,26 @@ export default function Home() {
             onClose={() => drawLocales()}
           />
         </div>
-        <div className="w-1/2 h-screen bg-muted flex flex-col">
+        <div
+          className="w-1/2 h-screen bg-muted flex flex-col"
+          ref={(div) => setDialogContainer(div)}
+        >
           <h3 className="text-tprimary text-2xl font-bold mx-4 mt-2">
             Locales
           </h3>
           <CustomList
             items={locales}
-            className="w-full grow px-4"
+            className="w-full h-full px-4"
             renderItem={(item) => <LocalesCard local={item} />}
           />
         </div>
+        <MyDialog
+          open={isDialogOpen}
+          close={() => setDialogOpen(false)}
+          className="w-1/2 h-screen"
+        >
+          <p>lalal</p>
+        </MyDialog>
       </div>
     </>
   );
