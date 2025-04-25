@@ -14,20 +14,8 @@ import { extractLocalesData } from "@/lib/utils";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerPortal,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import { Flag } from "lucide-react";
 import MyDialog from "@/components/customDialog/MyDialog";
+import ProductsCard from "@/components/productsCard/ProductsCard";
 
 const layerId = "points";
 
@@ -36,9 +24,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [locales, setLocales] = useState([]);
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const [dialogContainer, setDialogContainer] = useState<HTMLDivElement | null>(
-    null,
-  );
+  const [products, setProducts] = useState([]);
 
   const { map } = useMapContext();
   const placeholder = usePlaceholderAnimation(placeholders);
@@ -57,6 +43,8 @@ export default function Home() {
       data: response.data.localesDisponibles,
       layerId: layerId,
     });
+
+    setProducts(response.data.productosEncontrados);
 
     map?.drawPoints({
       data: data,
@@ -87,39 +75,42 @@ export default function Home() {
   }, [map]);
 
   return (
-    <>
-      <div className="w-screen h-screen flex">
-        <div className="w-full h-full relative">
-          <Map />
-          <SearchBar
-            className="absolute top-2 bg-white mx-[2.5%] w-[95%] shadow-lg"
-            placeholder={placeholder}
-            loading={loading}
-            action={handleSearch}
-            onClose={() => drawLocales()}
-          />
-        </div>
-        <div
-          className="w-1/2 h-screen bg-muted flex flex-col"
-          ref={(div) => setDialogContainer(div)}
-        >
-          <h3 className="text-tprimary text-2xl font-bold mx-4 mt-2">
-            Locales
-          </h3>
-          <CustomList
-            items={locales}
-            className="w-full h-full px-4"
-            renderItem={(item) => <LocalesCard local={item} />}
-          />
-        </div>
-        <MyDialog
-          open={isDialogOpen}
-          close={() => setDialogOpen(false)}
-          className="w-1/2 h-screen"
-        >
-          <p>lalal</p>
-        </MyDialog>
+    <div className="w-screen h-screen flex overflow-hidden relative">
+      <div className="w-full h-full relative">
+        <Map />
+        <SearchBar
+          className="absolute top-2 bg-white mx-[2.5%] w-[95%] shadow-lg"
+          placeholder={placeholder}
+          loading={loading}
+          action={handleSearch}
+          onClose={() => {
+            drawLocales();
+            setDialogOpen(false);
+          }}
+        />
       </div>
-    </>
+      <div className="w-1/2 h-screen bg-muted flex flex-col">
+        <h3 className="text-tprimary text-2xl font-bold mx-4 mt-2">Locales</h3>
+        <CustomList
+          items={locales}
+          className="w-full h-full px-4"
+          renderItem={(item) => <LocalesCard local={item} />}
+        />
+      </div>
+      <MyDialog
+        open={isDialogOpen}
+        close={() => setDialogOpen(false)}
+        className="w-1/3 h-screen bg-muted absolute right-0"
+      >
+        <h3 className="text-tprimary text-2xl font-bold mx-4 mt-2">
+          Productos
+        </h3>
+        <CustomList
+          items={products}
+          className="w-full h-full px-4 pb-12"
+          renderItem={(item) => <ProductsCard local={item} />}
+        />
+      </MyDialog>
+    </div>
   );
 }

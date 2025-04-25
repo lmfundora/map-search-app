@@ -1,10 +1,4 @@
 import { local } from "@/lib/types";
-import {
-  TooltipProvider,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@radix-ui/react-tooltip";
 import { Clock, Map, Phone } from "lucide-react";
 import Image from "next/image";
 

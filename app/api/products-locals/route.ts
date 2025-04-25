@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma_client";
 import { formatResponse } from "../formatResponse";
-import { idToString } from "../idToString";
+import { idToString, formatProductLocalesResponse } from "../idToString";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -13,6 +13,7 @@ export async function GET(request: Request) {
             productos: {
               name: {
                 contains: name,
+                mode: "insensitive",
               },
             },
             disponibility: true,
@@ -21,17 +22,34 @@ export async function GET(request: Request) {
       },
     });
 
-    const productosEncontrados = await prisma.productos.findMany({
+    const productosEncontrados = await prisma.products_locals.findMany({
       where: {
-        name: {
-          contains: name,
+        disponibility: true,
+        productos: {
+          name: {
+            contains: name,
+            mode: "insensitive",
+          },
+        },
+      },
+      select: {
+        local_id: true,
+        price: true,
+        stock: true,
+        productos: {
+          select: {
+            name: true,
+            description: true,
+            brand: true,
+            image: true,
+          },
         },
       },
     });
 
     const d = {
       localesDisponibles: idToString(localesConProducto),
-      productosEncontrados: idToString(productosEncontrados),
+      productosEncontrados: formatProductLocalesResponse(productosEncontrados),
     };
     const { data, headers } = formatResponse(d);
 

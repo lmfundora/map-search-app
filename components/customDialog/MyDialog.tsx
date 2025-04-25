@@ -11,7 +11,7 @@ const MyDialog = ({
 }) => {
   return (
     <div
-      className={`relative z-10 ${className} ${!open ? "slide-in-from-right" : "slide-out-to-right"}`}
+      className={`z-10 ${className} ${!open ? "slide-in-from-right" : "slide-out-to-right"}`}
     >
       {children}
     </div>
