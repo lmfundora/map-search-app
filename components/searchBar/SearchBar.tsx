@@ -28,8 +28,8 @@ const SearchBar = ({
     if (timer) clearTimeout(timer);
     setTimer(
       setTimeout(() => {
-        q !== "" && action(q);
-      }, 700),
+        q !== "" ? action(q) : close();
+      }, 900),
     );
   };
 

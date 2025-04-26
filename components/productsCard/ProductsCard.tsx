@@ -1,5 +1,6 @@
 import { Phone, Clock } from "lucide-react";
 import Image from "next/image";
+import { useMapContext } from "../providers/contexts/MapContext";
 
 type Props = {
   local_id: String;
@@ -16,8 +17,14 @@ const storageUrl = process.env.NEXT_PUBLIC_STORAGE_URL;
 const bucket = "/products-images//";
 
 const ProductsCard = ({ local }: { local: Props }) => {
+  const { map } = useMapContext();
   return (
-    <div className="h-fit min-h-48 w-full flex rounded-lg card-shadow bg-muted">
+    <div
+      className="h-fit min-h-48 w-full flex rounded-lg card-shadow bg-muted cursor-pointer"
+      onClick={() => {
+        map?.highlightPoint(local.local_id);
+      }}
+    >
       <div className="w-2/5 h-full relative">
         <Image
           src={storageUrl + bucket + local.productos.image}

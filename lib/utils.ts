@@ -21,7 +21,9 @@ export function extractLocalesData({
       name: item.name,
       image: item.image,
       slogan: item.slogan,
-      created_at: item.created_at,
+      contacto: item.contacto,
+      direccion: item.direccion,
+      horario: item.horario,
     },
     coords: [item.x, item.y],
   }));

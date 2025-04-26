@@ -19,11 +19,16 @@ const MultipleOverlay = () => {
   return (
     <div
       ref={(div) => setOverlayDiv(div)}
-      className="h-20 w-40 bg-white ol-popup"
+      className={`${map && "h-36 w-56 bg-white ol-popup p-5"}`}
     >
-      <p className="text-black">
-        En este punto se encuentran varios puntos, amplie el mapa para verlos.
-      </p>
+      {map && (
+        <>
+          <p className="text-black">
+            En este punto se encuentran varios puntos, amplie el mapa para
+            verlos.
+          </p>
+        </>
+      )}
     </div>
   );
 };

@@ -10,9 +10,7 @@ const MyDialog = ({
   children: React.ReactNode;
 }) => {
   return (
-    <div
-      className={`z-10 ${className} ${!open ? "slide-in-from-right" : "slide-out-to-right"}`}
-    >
+    <div className={`z-10 ${className} ${!open ? "slide-out" : "slide-in"}`}>
       {children}
     </div>
   );

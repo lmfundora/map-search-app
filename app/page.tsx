@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 
 import MyDialog from "@/components/customDialog/MyDialog";
 import ProductsCard from "@/components/productsCard/ProductsCard";
+import { useIsMobile } from "@/lib/hooks/useIsMobile";
 
 const layerId = "points";
 
@@ -25,6 +26,7 @@ export default function Home() {
   const [locales, setLocales] = useState([]);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [products, setProducts] = useState([]);
+  const isMobile = useIsMobile();
 
   const { map } = useMapContext();
   const placeholder = usePlaceholderAnimation(placeholders);
@@ -76,7 +78,9 @@ export default function Home() {
 
   return (
     <div className="w-screen h-screen flex overflow-hidden relative">
-      <div className="w-full h-full relative">
+      <div
+        className={`w-full relative ${isDialogOpen ? "height-slide-out" : "height-slide-in"}`}
+      >
         <Map />
         <SearchBar
           className="absolute top-2 bg-white mx-[2.5%] w-[95%] shadow-lg"
@@ -89,18 +93,22 @@ export default function Home() {
           }}
         />
       </div>
-      <div className="w-1/2 h-screen bg-muted flex flex-col">
-        <h3 className="text-tprimary text-2xl font-bold mx-4 mt-2">Locales</h3>
-        <CustomList
-          items={locales}
-          className="w-full h-full px-4"
-          renderItem={(item) => <LocalesCard local={item} />}
-        />
-      </div>
+      {!isMobile && (
+        <div className="w-1/2 h-screen bg-muted flex flex-col">
+          <h3 className="text-tprimary text-2xl font-bold mx-4 mt-2">
+            Locales
+          </h3>
+          <CustomList
+            items={locales}
+            className="w-full h-full px-4"
+            renderItem={(item) => <LocalesCard local={item} />}
+          />
+        </div>
+      )}
       <MyDialog
         open={isDialogOpen}
         close={() => setDialogOpen(false)}
-        className="w-1/3 h-screen bg-muted absolute right-0"
+        className="w-screen md:w-1/3 h-3/5 md:h-screen bg-muted absolute right-0 bottom-0"
       >
         <h3 className="text-tprimary text-2xl font-bold mx-4 mt-2">
           Productos

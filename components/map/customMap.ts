@@ -7,7 +7,8 @@ import { Cluster } from "ol/source";
 import VectorLayer from "ol/layer/Vector";
 import { linear } from "ol/easing";
 import { MapBrowserEvent, Overlay } from "ol";
-import { FeatureLike } from "ol/Feature";
+import Feature, { FeatureLike } from "ol/Feature";
+import { genericPointStyle, selectStyle } from "@/lib/layerStyles/points";
 
 export type overlayData = {
   value: any | null;
@@ -43,7 +44,6 @@ class CustomMap extends Map {
       const { features } = f[0].getProperties();
       const featureData = features[0].values_;
       const coords = featureData.geometry.flatCoordinates;
-      console.log(featureData);
 
       // Cando sean vairos puntos
       if (features.length > 1) {
@@ -70,6 +70,7 @@ class CustomMap extends Map {
     const map = this;
 
     this.removeAllLayers();
+    this.hideOverlays();
     if (data.length === 0) return;
 
     // this.hideOverlays();
@@ -202,8 +203,19 @@ class CustomMap extends Map {
     }
   }
 
-  public toggleCustomLayer(layerId: string, visible: boolean): void {
-    // Toggle layer visibility
+  public highlightPoint(id: String): void {
+    let icon = "/Location-Pin-2--Streamline-Core-Gradient.png";
+    const layers = this.getAllLayers();
+
+    if (layers.length <= 1) return;
+    const layer = layers[1] as VectorLayer;
+    layer.setStyle((feature) => {
+      if (feature.getProperties().features[0].id_ === id) {
+        return genericPointStyle(icon);
+      } else {
+        return selectStyle(feature);
+      }
+    });
   }
 }
 
