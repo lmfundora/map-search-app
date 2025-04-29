@@ -32,6 +32,8 @@ const PointOverlay = () => {
           <div className="w-2/5 h-full relative">
             <Image
               src={storageUrl + bucket + data?.image}
+              placeholder="blur"
+              blurDataURL="/V+shopping cart.jpeg"
               alt="Local image"
               fill
               quality={50}

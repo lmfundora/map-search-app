@@ -44,7 +44,7 @@ const ProductsCard = ({ local }: { local: Props }) => {
           <div className="flex flex-col h-full gap-2 justify-between">
             <p className="text-tsecondary">{local.productos.description}</p>
             <div className="flex items-baseline gap-1 justify-end">
-              <p className="text-xl font-bold text-tprimary">
+              <p className="text-xl lg:text-2xl font-bold text-tprimary">
                 {local.price.toString()}
               </p>
               <p className="text-sm text-tprimary">cup</p>

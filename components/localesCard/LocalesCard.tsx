@@ -16,7 +16,9 @@ const LocalesCard = ({ local }: { local: local }) => {
       <div className="w-2/5 h-full relative">
         <Image
           src={storageUrl + bucket + local.image}
+          key={local.id}
           alt="Local image"
+          loading="lazy"
           fill
           quality={50}
           sizes="(min-width: 150px) 200vw, 150px"

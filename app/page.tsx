@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import MyDialog from "@/components/customDialog/MyDialog";
 import ProductsCard from "@/components/productsCard/ProductsCard";
 import { useIsMobile } from "@/lib/hooks/useIsMobile";
+import { toast } from "sonner";
 
 const layerId = "points";
 
@@ -39,6 +40,12 @@ export default function Home() {
     } catch (error) {
       setLoading(false);
       handleErrors(error as AxiosError);
+    }
+
+    if (response.data.productosEncontrados.length === 0) {
+      toast.error("No existen productos con ese nombre");
+      setLoading(false);
+      return;
     }
 
     const data = extractLocalesData({
@@ -90,11 +97,12 @@ export default function Home() {
           onClose={() => {
             drawLocales();
             setDialogOpen(false);
+            setLoading(false);
           }}
         />
       </div>
       {!isMobile && (
-        <div className="w-1/2 h-screen bg-muted flex flex-col">
+        <div className="w-1/2 lg:w-1/3 h-screen bg-muted flex flex-col">
           <h3 className="text-tprimary text-2xl font-bold mx-4 mt-2">
             Locales
           </h3>
@@ -108,7 +116,7 @@ export default function Home() {
       <MyDialog
         open={isDialogOpen}
         close={() => setDialogOpen(false)}
-        className="w-screen md:w-1/3 h-3/5 md:h-screen bg-muted absolute right-0 bottom-0"
+        className="w-screen md:w-1/3 lg:w-1/4 h-3/5 md:h-screen bg-muted absolute right-0 bottom-0"
       >
         <h3 className="text-tprimary text-2xl font-bold mx-4 mt-2">
           Productos
